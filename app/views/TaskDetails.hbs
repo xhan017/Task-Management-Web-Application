@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <!-- Site Properties -->
+  <title>Tasks Details</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
+  <style type="text/css">
+ body {
+       background-image: url("../ASE/pics/Mainbg.jpg");
+	    background-size: auto 115%;
+    }
+
+    .ui.container {
+    margin-top : 50px;	<!-- top margin for container -->
+    }
+
+  .action {
+    position: relative;
+  }
+
+  .ui.selection.dropdown {
+      position: absolute;
+      left: 30px;
+  }
+
+  .ui.save.buttons {
+    position: absolute;
+    right: 30px;
+  }
+
+  .row{
+    position: relative;
+  }
+
+  .tiny.ui.icon.buttons{
+    position: absolute;
+    right:    25px;
+    bottom:   -20px;
+  }
+
+  .stretched.column{
+    position:   relative;
+  }
+
+  .ui.icon.buttons{
+    position: absolute;
+    right:    25px;
+
+  }
+
+  </style>
+
+</head>
+<body>
+<div class="ui left demo visible vertical inverted sidebar labeled icon menu">
+  <a class="item" href="index.html">
+    <i class="home icon"></i>
+    Home
+  </a>
+  <a class="item" href="Projects">
+    <i class="block layout icon"></i>
+    Projects
+  </a>
+    <a class="item" href="ProjectDB">
+    <i class="sitemap icon"></i>
+    Dashboard
+  </a>
+    <a class="active item" href="Tasks">
+    <i class="file alternate outline icon"></i>
+    Tasks
+  </a>
+  <a class="item" href="Friends" >
+    <i class="white users icon"></i>
+    Friends
+  </a>
+ <a class="item" href="Chat">
+    <i class="rocketchat icon"></i>
+    Chat
+  </a>
+  <a class="item" href="Notifications">
+    <i class="bell outline icon"></i>
+    Notifications
+  </a>
+  <a class="item">
+    <i class="smile icon"></i>
+    Log out
+  </a>
+</div>
+
+<div class="ui container segment" style="height:650px;">
+    <p id="userid" hidden>{{id}}</p>
+		<div class="ui grid">
+			<div class="twenty wide stretched column">
+				<h3 align="center"><i class="tasks icon"></i>Task</h3>
+				<div class="ui fitted divider"></div>
+				 <br>
+					<div class="row">
+            <div class="stretched column" align="center" id= "taskName">
+					</div>
+						<h3 align="center"><i class="edit icon"></i>Decription</h3>
+						<div class="ui fitted divider"></div>
+						<br>
+					<div class="row">
+						<div class="stretched column" align="center" id="taskDescription">
+						</div>
+					</div>
+						<h3 align="center"><i class="calendar check icon"></i>Status</h3>
+						<div class="ui fitted divider"></div>
+						<br>
+					<div class="row">
+						<div class="stretched column" align="center" id="taskStatus">
+						</div>
+            <div class="tiny ui icon buttons" id="editStatusBtn">
+              <div class="tiny ui basic red button icon" >
+              <i class="edit icon"></i>
+              Change Status
+              </div>
+            </div>
+						</div>
+							<h3 align="center"><i class="address card icon"></i>Team members</h3>
+						<div class="ui fitted divider"></div>
+						<br>
+						<div class="row" margin-left="100px">
+						</div>
+            <div class="row">
+            <div class="stretched column" align="center" id="taskMembers">
+            </div>
+            <div class="tiny ui icon buttons" id="manageBtn">
+              <div class="small ui basic red button icon">
+              <i class="edit icon"></i>
+              Manage Members
+              </div>
+            </div>
+            </div>
+						<h3 align="center"><i class="stopwatch icon"></i>Task Completion</h3>
+						<div class="ui fitted divider"></div>
+						<br>
+						<div class="row">
+						<div class="stretched column">
+						<div class="ui indicating progress" data-value="" data-total="10" id="progress1">
+		            <div class="bar"></div>
+		              <div class="label">Progress</div>
+		         </div>
+		           <div class="ui icon buttons">
+                 <div class="decrement ui basic red button icon" onclick="$('#progress1').progress('decrement');" id="progressDec"><i class="minus icon"></i></div>
+ 								<div class="increment ui basic green button icon" onclick="$('#progress1').progress('increment');" id="progressInc"><i class="plus icon"></i></div>
+				       </div>
+						</div>
+					</div>
+				</div>
+		  </div>
+    </div>
+
+<!--modal for drop list for status-->
+<div class="ui modal" modal='hide' id="editStatusModal" autofocus="false" style="width:530px;">
+  <div class="ui raised segment">
+    <div class="ui segment" style="height:120px; width:500px;">
+  <div class="description">
+    <p align="center">Please select your project's current status.</p>
+  </div>
+  <div class="ui divider"></div>
+  <div class="action">
+    <select class="ui selection dropdown" id="getStatus">
+    <option value="">Status</option>
+    <option value="In Progress">In Progress</option>
+    <option value="On Hold">On Hold</option>
+    <option value="Completed">Completed</option>
+  </select>
+      <div class="ui save buttons" >
+        <button class="ui positive button" id="saveStatusBtn">Save</button>
+          <div class="or"></div>
+            <button class="ui button" id="cancelStatusBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div><!-- end of containerA -->
+</body>
+<script src="./JS/enterTask.js"></script>
+</html>

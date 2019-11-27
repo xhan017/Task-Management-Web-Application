@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Standard Meta -->
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<!-- Site Properties -->
+		<title>Dashboard</title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
+		<script src="JS/Chatter.js"></script>
+		<style type="text/css">
+			body {
+			background-image: url("../ASE/pics/Mainbg.jpg");
+			background-size: auto 115%;
+			display: flex;
+			height: 100%;
+			flex-direction: column;
+			}
+			.hidden.menu {
+			display: none;
+			}
+			.ui.grid {
+			margin-top: 50px;
+			height: 80vh;
+			margin-bottom: 1.5em;
+			}
+			.ui.segment {
+			height: 100%;
+			}
+		</style>
+		<script>
+			$(document)
+			    .ready(function() {
+			        // fix menu when passed
+			        $('.masthead')			            .visibility({
+			                once: false,
+			                onBottomPassed: function() {
+			                    $('.fixed.menu').transition('fade in');
+			                },
+			                onBottomPassedReverse: function() {
+			                    $('.fixed.menu').transition('fade out');
+			                }
+			            });
+			
+			        // create sidebar and attach to menu open
+			        $('.ui.sidebar').sidebar('attach events', '.toc.item');
+			
+			    });
+			
+			$('.ui.labeled.icon.sidebar')
+			    .sidebar('toggle');
+			});
+		</script>
+	</head>
+	<body>
+		<div class="ui left demo visible vertical inverted sidebar labeled icon menu">
+			<a class="item" href="index.html">
+			<i class="home icon"></i> Home
+			</a>
+			<a class="item" href="projects">
+			<i class="block layout icon"></i> Projects
+			</a>
+			<a class="item" href="ProjectDB">
+			<i class="sitemap icon"></i> Dashboard
+			</a>
+			<a class="item" href="Tasks">
+			<i class="file alternate outline icon"></i> Tasks
+			</a>
+			<a class="item" href="Friends">
+			<i class="white users icon"></i> Friends
+			</a>
+			<a class="active item" href="Chat">
+			<i class="rocketchat icon"></i> Chat
+			</a>
+			<a class="item" href="Notifications">
+			<i class="bell outline icon"></i> Notifications
+			</a>
+			<a class="item">
+			<i class="smile icon"></i> Log out
+			</a>
+		</div>
+		<!-- Misc stuff for data -->
+		<p id="userID" hidden>{{id}}</p>
+		<p id="name" hidden>{{name}}</p>
+		<p id="username" hidden>{{username}}</p>
+		<!-- Chat stuff here -->
+		<div class="ui container" >
+			<div class="ui three column divided grid">
+				<div class="row">
+					<!-- Chat channels div -->
+					<div class="three wide column">
+						<h5 class="ui grey inverted aligned attached header">
+							<i class="keyboard icon"></i>
+							<div class="content">
+								Chat channels
+								<div class="sub header">Click to join</div>
+							</div>
+						</h5>
+						<div class="ui attached nested blue segment" style="height:63vh">
+							<div class="ui fluid secondary vertical menu" id="chatChannelsDiv">
+								<!-- Old stuff for reference
+									<a class="item">
+									QA Engineers
+									</a>
+									<a class="active item">
+									Back-end Developers
+									</a>
+									<a class="item"><i class="comment alternate outline icon"></i>
+									Release Management
+									</a>
+									
+									-->
+							</div>
+						</div>
+						<div class="ui compact attached segment" style="height:5vh" id="createChannelDiv">
+							<button class="ui fluid labeled basic icon button" id="createChannelBtn">
+							<i class="terminal icon"></i>
+							Create
+							</button>
+						</div>
+						<div class="ui compact attached segment" style="height:5vh" id="viewInvitesDiv">
+							<button class="ui fluid basic button" id="viewInvitesBtn">
+							<i class="icon envelope open outline"></i>
+							View invites
+							</button>
+						</div>
+					</div>
+					<!-- Active chat div -->
+					<div class="ten wide column">
+						<h5 class="ui red inverted attached header">
+							<i class="rocketchat icon"></i>
+							<div class="content">
+								Current Channel
+								<div class="sub header" id="channelHeader">Quality Assurance</div>
+								<p id="channelID" hidden></p>
+								<p id="channelName" hidden></p>
+							</div>
+						</h5>
+						<div class="ui attached blue segment" style="height:70vh;overflow:scroll; overflow-x: hidden;" id="makemescroll">
+							<div class="ui comments" id="chatMainDiv">
+							</div>
+						</div>
+						<div class="ui compact attached segment" style="height:5vh">
+							<div class="ui fluid disabled icon input" id="messageInputDiv">
+								<input type="text" placeholder="Send a message... " id="messageinput">
+								<i class="paper plane outline icon"></i>
+							</div>
+						</div>
+					</div>
+					<!-- Current users div -->
+					<div class="three wide column">
+						<h5 class="ui grey inverted attached header">
+							<i class="user circle icon"></i>
+							<div class="content">
+								User List
+								<div class="sub header">Current users</div>
+							</div>
+						</h5>
+						<div class="ui attached blue segment" style="height:70vh">
+							<h4 class="ui header"></h4>
+							<div class="ui items" id="usersDiv">
+							</div>
+						</div>
+						<div class="ui compact attached segment" style="height:5vh">
+							<button class="ui fluid basic disabled button" id="inviteUserBtn">
+							<i class="icon user"></i>
+							Invite User
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modals -->
+		<div class="ui mini modal" id="invitesModal">
+			<div class="header">Invites</div>
+			<div class="ui segments" id="invitesDiv">
+			</div>
+		</div>
+        
+		<div class="ui mini modal" id="sendInvitesModal">
+		<h1 class="ui header" id="inviteFriendsHeader"></h1>
+		<div class="ui basic segment">
+			<div class="ui fluid form">
+				<div class="ui fluid multiple search selection dropdown" id="usersDropdown">
+					<input name="tags" type="hidden">
+					<i class="dropdown icon"></i>
+					<div class="default text">Invite groupmates</div>
+					<div class="menu" id="dropdown-menu">
+						<div class="item" data-value="4">John Wick</div>
+						<div class="item" data-value="5">Shannon Chong</div>
+						<div class="item" data-value="6">Yung Trucker</div>
+					</div>
+				</div>
+				<p></p>
+				<button class="ui fluid basic positive button" id="sendInvitesBtn">
+					<i class="icon upload"></i>
+					Send invite
+				</button>
+			</div>
+		</div>
+            
+		<div class="ui mini modal" id="createChannelModal">
+			<div class="header">Create Channel</div>
+			<div class="ui basic segment">
+				<form class="ui form" id="createChannelForm">
+					<div class="field">
+						<label>Channel Name</label>
+						<input type="text" name="first-name" placeholder="Developers..." id="channelnameText">
+					</div>
+					<div class="field">
+						<label>Project Group</label>
+						<div class="ui selection dropdown" id="dropdown">
+							<input type="hidden" name="projectGroup">
+							<i class="dropdown icon"></i>
+							<div class="default text">Select Project Group</div>
+							<div class="menu" id="menuOptions">
+								
+							</div>
+						</div>
+					</div>
+					<button class="ui fluid basic positive button" id="createChannelBtn">
+					<i class="icon check circle"></i>
+					Create!
+					</button>
+				</form>
+			</div>
+            </div>
+            
+            <!-- For modal (channel created / whatever success) -->
+                <div class="ui mini modal" id="successMessageModal">
+                    <div class="header">Success!</div>
+                    <div class="content">
+                        <p id="modalText">Your friend invite has been sent!</p>
+                    </div>
+                    <div class="actions">
+                        <div class="ui green button" id="successMessageModalClose">OK</div>
+                    </div>
+                </div>
+        </div>
+            
+	</body>
+	<script src="./JS/chat.js"></script>
+</html>

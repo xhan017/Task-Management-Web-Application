@@ -1,0 +1,124 @@
+<html>
+<head>
+    <title>Chat tester</title>
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+        
+<style type="text/css">
+    body > .ui.container {
+      margin-top: 3em;
+    }  
+    body > .avatar {
+        width:32px;
+        max-width:none;
+        height:32px;
+    }
+</style>
+    
+</head>
+<body>
+<div class="ui mini modal test">
+  <div class="ui content">
+    <div class="ui icon input">
+        <input type="text" placeholder="Enter username" id="usernameText">
+        <i class="users icon"></i>
+    </div>
+      <button class="ui green button" id="usernameSubmit">Submit</button>
+  </div>
+</div>
+
+<div class="ui container">
+    <h1>CHATTT</h1>
+    <div class="ui relaxed grid" id="messageArea">
+        <div class="three wide column" id="active-users">
+            <h4>Users</h2>
+            
+        </div>
+        
+        <div class="ui ten wide column">
+        <div class="ui list" id="chat-window">
+            
+        </div>
+        
+        <div class="ui fluid action input">
+            <input id="textField" type="text" placeholder="Search...">
+            <div class="ui button" id="submit">Send</div>
+        </div>
+        </div>
+        
+    </div>
+    
+
+    
+</div>
+    
+<script>
+$(function(){
+    var myUsername='';
+    
+    $(".test").modal('show');    
+    var $shithole = $('#chat-window');
+    var socket = io.connect();
+    
+    // for sending message
+    var $message = $('#textField');
+    var submitBtn = document.getElementById('submit');
+    
+    // username text 
+    var $usernameText = $('#usernameText');
+    var usernameSubmitBtn = document.getElementById('usernameSubmit');
+    
+    // for appending user list
+    var $userList = $('#active-users');
+    
+    submitBtn.addEventListener("click", function(){
+        socket.emit('send message', $message.val());
+        var html = '<div class="item"><img class="ui avatar image" src="/images/avatar/small/'+myUsername+'.jpg"><div class="content"><a class="header">'+myUsername+'</a><div class="description">'+$message.val()+'</div></div></div>';
+        console.log($message.val());
+        $shithole.append(html);
+        $message.val('');
+    });
+    
+    usernameSubmitBtn.addEventListener("click", function(){
+        socket.emit('new user', $usernameText.val(), function(data){
+            if(data){
+                $(".test").modal('hide'); 
+            }
+        });
+        console.log('username is: '+$usernameText.val());
+        myUsername = $usernameText.val();
+    });
+    
+    socket.on('new message', function(data){
+        var html = '<div class="item"><img class="ui avatar image" src="/images/avatar/small/'+data.user+'.jpg"><div class="content"><a class="header">'+data.user+'</a><div class="description">'+data.msg+'</div></div></div>';
+        console.log(data.msg);
+        if(data.user != myUsername){
+            $shithole.append(html);
+        }
+    });
+    
+    socket.on('get users', function(data){
+        console.log("From JS: updating users "+data.length);
+        var div = document.getElementById('active-users');
+        while(div.firstChild){
+            div.removeChild(div.firstChild);
+        }
+        var html='';
+        for(i = 0; i < data.length; i++){
+            html = '<div class="row"><img class="ui avatar image" src="/images/avatar/small/'+data[i]+'.jpg"><a class="header">'+data[i]+'</a></div><br>';
+            $userList.append(html);
+            console.log("From JS: "+data[i]);
+        }
+    });
+});
+</script>
+
+</body>
+    
+</html>

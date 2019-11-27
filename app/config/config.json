@@ -1,0 +1,49 @@
+{
+ 
+    "development": {
+ 
+        "username": "root",
+ 
+        "password": "cz3002IsFun!",
+ 
+        "database": "cz3002_synergy",
+ 
+        "host": "159.65.134.157",
+        
+        "port": 3306,
+ 
+        "dialect": "mysql",
+        
+        "logging": false
+ 
+    },
+ 
+    "test": {
+ 
+        "username": "",
+ 
+        "password": null,
+ 
+        "database": "",
+ 
+        "host": "",
+ 
+        "dialect": "mysql"
+ 
+    },
+ 
+    "production": {
+ 
+        "username": "",
+ 
+        "password": null,
+ 
+        "database": "",
+ 
+        "host": "127.0.0.1",
+ 
+        "dialect": "mysql"
+ 
+    }
+ 
+}

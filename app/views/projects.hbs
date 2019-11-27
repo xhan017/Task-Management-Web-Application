@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <!-- test-->
+	<head>
+		<!-- Standard Meta -->
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<!-- Site Properties -->
+		<title>Dashboard</title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
+		<script
+			src="https://code.jquery.com/jquery-3.1.1.min.js"
+			integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
+		<style type="text/css">
+			body {
+			background-image: url("../ASE/pics/Mainbg.jpg");
+			background-size: auto 115%;
+			overflow: hidden;
+			}
+			.ui.container {
+			margin-top : 50px;	<!-- top margin for container -->
+			}
+
+			.ui.mini.basic.modal {
+				position: relative;
+			}
+
+			.ui.green.ok.inverted.button {
+		    position: absolute;
+		    left:     120px;
+
+		  }
+		</style>
+		<script>
+			$(document)
+			  .ready(function() {
+			    // fix menu when passed
+			    $('.masthead')
+			      .visibility({
+			        once: false,
+			        onBottomPassed: function() {
+			          $('.fixed.menu').transition('fade in');
+			        },
+			        onBottomPassedReverse: function() {
+			          $('.fixed.menu').transition('fade out');
+			        }
+			      });
+
+			    // create sidebar and attach to menu open
+			 $('.ui.sidebar')
+			      .sidebar('attach events', '.toc.item')
+			    ;
+
+			  });
+			$('.ui.labeled.icon.sidebar')
+			.sidebar('toggle');
+
+			  })
+			;
+		</script>
+	</head>
+	<body>
+		<div class="ui left demo visible vertical inverted sidebar labeled icon menu">
+			<a class="item" href="index.html">
+			<i class="home icon"></i>
+			Home
+			</a>
+			<a class="active item" href="projects">
+			<i class="block layout icon"></i>
+			Projects
+			</a>
+			<a class="item" href="ProjectDB">
+			<i class="sitemap icon"></i>
+			Dashboard
+			</a>
+			<a class="item" href="Tasks">
+			<i class="file alternate outline icon"></i>
+			Tasks
+			</a>
+			<a class="item" href="Friends" >
+			<i class="white users icon"></i>
+			Friends
+			</a>
+			<a class="item" href="Chat">
+			<i class="rocketchat icon"></i>
+			Chat
+			</a>
+			<a class="item" href="Notifications">
+			<i class="bell outline icon"></i>
+			Notifications
+			</a>
+			<a class="item">
+			<i class="smile icon"></i>
+			Log out
+			</a>
+		</div>
+		<div class="ui container">
+			<!--top menu-->
+			<h1 class="ui header">
+				<img src="/images/avatar/{{username}}.jpg" class="ui circular image"> {{ name }}
+			</h1>
+			<p id="userID" hidden>{{id}}</p>
+			<h1>Project Management</h1>
+			<div class="ui basic segments">
+				<div class="ui red segment">
+					<div class="ui grid" id="projectUIGrid">
+						<!-- The cards go here-->
+					</div>
+				</div>
+			</div>
+            <!-- MODAL -->
+						<div class="ui modal" modal='hide' id="createProjModal">
+							<div class="ui raised segment">
+								<div class="ui container segment" style="height:650px; ">
+									<!--top menu-->
+									<div class="ui">
+										<form class="ui form" id="createProjectForm">
+											<div class="field">
+												<h3>Project Title</h3>
+												<input type="text" name="proj-title" id="projText" placeholder="Enter your project title">
+											</div>
+											<div class="field">
+												<h3>Project Summary</h3>
+												<textarea rows="4" name="proj-sum" id="projSumText" placeholder="Enter your project summary"></textarea>
+											</div>
+											<div class="field">
+												<h3>Project Scope</h3>
+												<textarea rows="2" name="proj-scope" id="projScopeText"placeholder="Enter your project scope"></textarea>
+											</div>
+											<div class="field">
+												<h3>Project Start Date</h3>
+												<div class="ui calendar" id="example1">
+													<div class="ui input left icon">
+														<i class="calendar icon"></i>
+														<input type="date" placeholder="Date/Time" name="start-date" id="projStartDate">
+													</div>
+												</div>
+											</div>
+											<div class="field">
+												<h3>Project End Date</h3>
+												<div class="ui calendar" id="example1">
+													<div class="ui input left icon">
+														<i class="calendar icon"></i>
+														<input type="date" placeholder="Date/Time" name="end-date" id="projEndDate">
+													</div>
+												</div>
+											</div>
+											<div class="field">
+												<div class="ui checkbox">
+													<input type="checkbox" tabindex="0" class="show">
+													<label>I agree to the Terms and Conditions of using Synergy.</label>
+												</div>
+											</div>
+											<div class="ui right floated positive right labeled icon button" id="submitProjectBtn">
+												Create
+												<i class="checkmark icon"></i>
+											</div>
+											<button class="ui right floated button" type="cancel">Cancel</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Modal 2-->
+						<div class="ui mini basic modal" modal='hide' id="createdProjModal">
+							<div class="ui icon header">
+								<i class="thumbs up icon"></i>
+								Project created!
+							</div>
+							<div class="content" align="center">
+								<p>Your project has been created</p>
+							</div>
+							<div class="actions">
+								<div class="ui green ok inverted button">
+									<i class="checkmark icon"></i>
+									Done!
+								</div>
+							</div>
+						</div>
+
+			<div class="ui basic segment">
+				<div class="ui card">
+					<div class="content">
+						<a class="header" href="#">Create new project</a>
+						<p>Please click on the create button to create new project</p>
+					</div>
+					<div class="extra content" style="text-align:center">
+						<a class="positive ui right labeled icon button" id="createProj">
+						<i class="right arrow icon"></i>
+						Create
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="./JS/createProj.js"></script>
+</html>
